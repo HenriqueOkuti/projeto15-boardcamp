@@ -1,21 +1,13 @@
-import express from 'express';
+import express, { json } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import router from './source/routers/router.js';
 
 dotenv.config();
 const server = express();
-server.use(cors);
-
-//Test
-
-//================================
-// CRUD de Categorias [Create | Read]:
-
-// ROTA GET: /categories
-// RESPONSE: lista de todas as categorias (array de objetos)
-
-// ROTA POST: /categories
-// RESPONSE: 201 (created) || 400 (empty name) || 409 (name already exists)
+server.use(cors());
+server.use(json());
+server.use(router);
 
 //================================
 // CRUD de Jogos [Create | Read]:
@@ -95,5 +87,5 @@ server.use(cors);
 //================================
 
 server.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT}`)
+  console.log(`Server running on PORT ${process.env.PORT}`)
 );
