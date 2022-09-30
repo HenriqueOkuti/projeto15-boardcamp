@@ -6,6 +6,8 @@ dotenv.config();
 const server = express();
 server.use(cors);
 
+//Test
+
 //================================
 // CRUD de Categorias [Create | Read]:
 
