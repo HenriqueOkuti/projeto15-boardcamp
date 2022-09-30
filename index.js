@@ -86,6 +86,6 @@ server.use(router);
 
 //================================
 
-server.listen(process.env.PORT, () =>
-  console.log(`Server running on PORT ${process.env.PORT}`)
-);
+const PORT = process.env.PORT; //|| 4001;
+
+server.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
