@@ -1,5 +1,6 @@
 import connection from '../db/connection.js';
 import catchError from '../functions/catchError.js';
+import { STATUS_CODE } from '../enums/statusCodes.js';
 
 export async function getGames(req, res) {
   const { name } = req.query;
@@ -29,7 +30,7 @@ export async function createGame(req, res) {
       [newGame.categoryId]
     );
     if (searchGameId.rowCount === 0) {
-      return res.sendStatus(400);
+      return res.sendStatus(STATUS_CODE.BAD_REQUEST);
     }
 
     const searchGameName = await connection.query(
@@ -38,7 +39,7 @@ export async function createGame(req, res) {
     );
 
     if (searchGameName.rowCount > 0) {
-      return res.sendStatus(409);
+      return res.sendStatus(STATUS_CODE.CONFLICT);
     }
 
     const INSERT_QUERY =
@@ -51,7 +52,7 @@ export async function createGame(req, res) {
       Number(newGame.pricePerDay),
     ]);
 
-    res.sendStatus(201);
+    res.sendStatus(STATUS_CODE.CREATED);
   } catch (error) {
     catchError(res, error);
   }
