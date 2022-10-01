@@ -12,16 +12,6 @@ server.use(router);
 //================================
 // CRUD de Clientes [Create | Read | Update]:
 
-// ROTA GET: /customers
-// RESPONSE: lista com todos os clientes (array de objetos)
-// PARAMS: 'cpf' query string, retornar apenas dados que começam com o cpf (ex: cpf=012 -> retornar dados que começam com 012 no cpf)
-
-// ROTA GET: /customers/:id
-// RESPONSE: retornar objeto cliente se id existir || 404 (does not exist)
-
-// ROTA POST: /customers
-// RESPONSE: 201 (created) || 400 (invalid parameters) || 409 (client already exists)
-
 // ROTA PUT: /customers/:id
 // RESPONSE: 200 (updated) || 400 (invalid parameters) || 409 (cpf already in use)
 

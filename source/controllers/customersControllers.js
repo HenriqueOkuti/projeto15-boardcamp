@@ -10,7 +10,7 @@ export async function getCustomers(req, res) {
       params.push(`${cpf}%`);
       searchBy += `WHERE cpf ILIKE $${params.length}`;
     }
-    const SEARCH_QUERY = `SELECT * FROM customers ${searchBy}`;
+    const SEARCH_QUERY = `SELECT * FROM customers ${searchBy} ORDER BY id ASC`;
     const { rows: customers } = await connection.query(SEARCH_QUERY, params);
     res.send(customers);
   } catch (error) {
@@ -63,7 +63,31 @@ export async function createCustomer(req, res) {
 }
 
 export async function updateCustomer(req, res) {
+  const { id } = req.params;
+  const customer = req.body;
+
   try {
+    const SEARCH_QUERY = `SELECT * FROM customers WHERE cpf = $1 AND id <> $2`;
+    const SEARCH_CUSTOMER = await connection.query(SEARCH_QUERY, [
+      customer.cpf,
+      id,
+    ]);
+
+    if (SEARCH_CUSTOMER.rowCount > 0) {
+      return res.sendStatus(409);
+    }
+
+    const UPDATE_QUERY = `UPDATE customers SET name=$1, phone=$2, cpf=$3, birthday=$4 WHERE id=$5`;
+
+    await connection.query(UPDATE_QUERY, [
+      customer.name,
+      customer.phone,
+      customer.cpf,
+      customer.birthday,
+      id,
+    ]);
+
+    res.sendStatus(200);
   } catch (error) {
     catchError(res, error);
   }
