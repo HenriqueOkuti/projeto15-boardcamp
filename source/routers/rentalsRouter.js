@@ -1,4 +1,5 @@
 import connection from '../db/connection.js';
+import { STATUS_CODE } from '../enums/statusCodes.js';
 
 export async function getRentals(req, res) {}
 
