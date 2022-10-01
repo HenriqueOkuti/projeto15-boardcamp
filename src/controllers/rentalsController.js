@@ -6,22 +6,38 @@ import getDeltaDays from '../functions/getDeltaDays.js';
 import handleParams from '../functions/handleParams.js';
 
 export async function getRentals(req, res) {
-  const { customerId, gameId } = req.query;
+  const { customerId, gameId, order, desc } = req.query;
   try {
     const handledParams = handleParams(customerId, gameId);
     const searchBy = handledParams[0];
     const params = handledParams[1];
+
+    let orderBy = 'ORDER BY ';
+
+    if (order) {
+      orderBy += 'customer ';
+      if (desc) {
+        orderBy += 'DESC';
+      }
+    }
+
+    if (!order) {
+      orderBy += 'rentals.id ASC';
+    }
+
     const SEARCH_QUERY = `
     SELECT rentals.*, customers.name AS customer, games.name AS game, categories.* FROM rentals
-    JOIN customers ON customers.id=rentals."customerId"
+    JOIN customers ON customers.id=rentals."customerId" 
     JOIN games ON games.id=rentals."gameId"
     JOIN categories ON categories.id=games."categoryId"
-    ${searchBy};`;
+    ${searchBy} ${orderBy};`;
     const OBJECT_QUERY = {
       text: SEARCH_QUERY,
       rowMode: 'array',
     };
+
     const result = await connection.query(OBJECT_QUERY, params);
+
     res.send(result.rows.map((row) => arrayToObject(row)));
   } catch (error) {
     catchError(res, error);

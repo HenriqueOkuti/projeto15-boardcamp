@@ -15,14 +15,17 @@ export async function getCustomers(req, res) {
     let orderBy = 'ORDER BY ';
 
     if (order) {
-      orderBy += '(name) ';
+      orderBy += 'name ';
+      if (desc) {
+        orderBy += 'DESC';
+      }
     }
 
-    if (desc) {
+    if (order && desc) {
       orderBy += 'DESC';
     }
 
-    if (!order && !desc) {
+    if (!order) {
       orderBy += 'id ASC';
     }
 
