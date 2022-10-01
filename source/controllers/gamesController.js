@@ -16,7 +16,7 @@ export async function getGames(req, res) {
     const result = await connection.query(SEARCH_QUERY, params);
     res.send(result.rows);
   } catch (error) {
-    return catchError(res, error);
+    catchError(res, error);
   }
 }
 
@@ -53,6 +53,6 @@ export async function createGame(req, res) {
 
     res.sendStatus(201);
   } catch (error) {
-    return catchError(res, error);
+    catchError(res, error);
   }
 }

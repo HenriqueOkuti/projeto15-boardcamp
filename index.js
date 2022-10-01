@@ -10,16 +10,6 @@ server.use(json());
 server.use(router);
 
 //================================
-// CRUD de Jogos [Create | Read]:
-
-// ROTA GET: /games
-// RESPONSE: lista dos jogos encontrados (array de objetos , não esquecer categoria dos jogos)
-// PARAMS: 'name' na query string da requisição, filtrar jogos, retornar os que começam com a string passada (case insensitive)
-
-// ROTA POST: /games
-// RESPONSE: 201 (created) || 400 (invalid parameters) || 409 (game already exists)
-
-//================================
 // CRUD de Clientes [Create | Read | Update]:
 
 // ROTA GET: /customers
