@@ -3,7 +3,7 @@ import catchError from '../functions/catchError.js';
 import { STATUS_CODE } from '../enums/statusCodes.js';
 
 export async function getGames(req, res) {
-  const { name } = req.query;
+  const { name, order, desc } = req.query;
   try {
     const params = [];
     let searchBy = '';
@@ -11,8 +11,20 @@ export async function getGames(req, res) {
       params.push(`${name}%`);
       searchBy += `WHERE games.name ILIKE $${params.length}`;
     }
+    let orderBy = 'ORDER BY ';
+
+    if (order) {
+      orderBy += 'name ';
+      if (desc) {
+        orderBy += 'DESC';
+      }
+    }
+
+    if (!order) {
+      orderBy += 'id ASC';
+    }
     const SEARCH_QUERY = `
-    SELECT games.*, categories.name AS "categoryName" FROM games JOIN categories ON categories.id=games."categoryId"${searchBy} ORDER BY id DESC;
+    SELECT games.*, categories.name AS "categoryName" FROM games JOIN categories ON categories.id=games."categoryId"${searchBy} ${orderBy};
   `;
     const result = await connection.query(SEARCH_QUERY, params);
     res.send(result.rows);

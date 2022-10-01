@@ -3,7 +3,8 @@ import catchError from '../functions/catchError.js';
 import { STATUS_CODE } from '../enums/statusCodes.js';
 
 export async function getCustomers(req, res) {
-  const { cpf } = req.query;
+  const { cpf, order, desc } = req.query;
+
   try {
     const params = [];
     let searchBy = '';
@@ -11,7 +12,24 @@ export async function getCustomers(req, res) {
       params.push(`${cpf}%`);
       searchBy += `WHERE cpf ILIKE $${params.length}`;
     }
-    const SEARCH_QUERY = `SELECT * FROM customers ${searchBy} ORDER BY id ASC;`;
+    let orderBy = 'ORDER BY ';
+
+    if (order) {
+      orderBy += 'name ';
+      if (desc) {
+        orderBy += 'DESC';
+      }
+    }
+
+    if (order && desc) {
+      orderBy += 'DESC';
+    }
+
+    if (!order) {
+      orderBy += 'id ASC';
+    }
+
+    const SEARCH_QUERY = `SELECT * FROM customers ${searchBy} ${orderBy};`;
     const { rows: customers } = await connection.query(SEARCH_QUERY, params);
     res.send(customers);
   } catch (error) {
@@ -21,6 +39,7 @@ export async function getCustomers(req, res) {
 
 export async function getSpecificCustomer(req, res) {
   const { id } = req.params;
+
   if (!Number(id)) {
     return res.sendStatus(STATUS_CODE.BAD_REQUEST);
   }

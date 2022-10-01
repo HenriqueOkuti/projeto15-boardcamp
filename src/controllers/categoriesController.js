@@ -3,8 +3,21 @@ import catchError from '../functions/catchError.js';
 import { STATUS_CODE } from '../enums/statusCodes.js';
 
 export async function getCategories(req, res) {
+  const { order, desc } = req.query;
   try {
-    const SEARCH_QUERY = 'SELECT * FROM categories;';
+    let orderBy = 'ORDER BY ';
+
+    if (order) {
+      orderBy += 'name ';
+      if (desc) {
+        orderBy += 'DESC';
+      }
+    }
+
+    if (!order) {
+      orderBy += 'id ASC';
+    }
+    const SEARCH_QUERY = `SELECT * FROM categories ${orderBy};`;
     const { rows: categories } = await connection.query(SEARCH_QUERY);
     res.send(categories);
   } catch (error) {
