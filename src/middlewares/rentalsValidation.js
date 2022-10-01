@@ -1,4 +1,4 @@
-import { rentalSchema } from '../schemas/schemas';
+import { rentalSchema } from '../schemas/schemas.js';
 
 export function validateRent(req, res, next) {
   const rent = req.body;

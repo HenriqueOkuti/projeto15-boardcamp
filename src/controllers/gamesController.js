@@ -44,13 +44,14 @@ export async function createGame(req, res) {
 
     const INSERT_QUERY =
       'INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay") VALUES ($1, $2, $3, $4, $5) ';
-    await connection.query(INSERT_QUERY, [
+    const ARRAY_QUERY = [
       newGame.name,
       newGame.image,
       Number(newGame.stockTotal),
       newGame.categoryId,
       Number(newGame.pricePerDay),
-    ]);
+    ];
+    await connection.query(INSERT_QUERY, ARRAY_QUERY);
 
     res.sendStatus(STATUS_CODE.CREATED);
   } catch (error) {
