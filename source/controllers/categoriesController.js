@@ -8,7 +8,7 @@ export async function getCategories(req, res) {
     );
     res.send(categories);
   } catch (error) {
-    return catchError(res, error);
+    catchError(res, error);
   }
 }
 
@@ -28,6 +28,6 @@ export async function createCategory(req, res) {
 
     res.sendStatus(201);
   } catch (error) {
-    return catchError(res, error);
+    catchError(res, error);
   }
 }

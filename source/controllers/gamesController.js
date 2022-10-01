@@ -11,12 +11,12 @@ export async function getGames(req, res) {
       searchBy += `WHERE games.name ILIKE $${params.length}`;
     }
     const SEARCH_QUERY = `
-    SELECT games.*, categories.name AS "categoryName" FROM games JOIN categories ON categories.id=games."categoryId"${searchBy};
+    SELECT games.*, categories.name AS "categoryName" FROM games JOIN categories ON categories.id=games."categoryId"${searchBy} ORDER BY id DESC;
   `;
     const result = await connection.query(SEARCH_QUERY, params);
     res.send(result.rows);
   } catch (error) {
-    return catchError(res, error);
+    catchError(res, error);
   }
 }
 
@@ -53,6 +53,6 @@ export async function createGame(req, res) {
 
     res.sendStatus(201);
   } catch (error) {
-    return catchError(res, error);
+    catchError(res, error);
   }
 }
